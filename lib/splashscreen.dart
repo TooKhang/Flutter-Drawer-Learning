@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
+          children: const [
             Text(
               "Homestay Raya",
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'mainscreen.dart';
+import 'loginscreen.dart';
+import 'mainmenu.dart';
+import 'registrationscreen.dart';
 
 class SellerScreen extends StatefulWidget {
   const SellerScreen({super.key});
@@ -12,69 +13,33 @@ class SellerScreen extends StatefulWidget {
 class _SellerScreenState extends State<SellerScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Seller")),
-      body: const Center(
-        child: Text("Seller"),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountEmail: const Text('ABC123@gmail.com'),
-              accountName: Row(
-                children: <Widget>[
-                  Container(
-                    width: 150,
-                    height: 200,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: const CircleAvatar(
-                      radius: 64,
-                      backgroundColor: Colors.redAccent,
-                      child: Icon(
-                        Icons.check,
-                      ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Text('user'),
-                      const Text('@User'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: const Text('Buyer'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (content) => const MainScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('Seller'),
-              onTap: () {
-                 Navigator.pop(context);
-                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (content) => const SellerScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('Profile'),
-              onTap: () {
-                 Navigator.pop(context);
-              },
-            ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Seller"),
+          actions: [
+            IconButton(
+                onPressed: _registrationForm,
+                icon: const Icon(Icons.app_registration)),
+            IconButton(
+                onPressed: _loginForm,
+                icon: const Icon(Icons.login)),
           ],
         ),
+        body: const Center(child: Text("Seller")),
+        drawer: const MainMenuWidget(),
       ),
     );
+  }
+
+  void _registrationForm() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const RegistrationScreen()));
+  }
+
+  void _loginForm() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (content) => const LoginScreen()));
   }
 }
