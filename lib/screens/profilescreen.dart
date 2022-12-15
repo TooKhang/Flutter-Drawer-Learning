@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'mainmenu.dart';
+import 'package:homestay_raya/model/user.dart';
+import '../shared/mainmenu.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final User user;
+  const ProfileScreen({super.key, required this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -14,10 +16,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Profile")),
-        body: const Center(child: Text("Profile")),
-        drawer: const MainMenuWidget(),
-      ),
+          appBar: AppBar(title: const Text("Profile")),
+          body: const Center(child: Text("Profile")),
+          drawer: MainMenuWidget(user: widget.user,)),
     );
   }
 }

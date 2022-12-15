@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:homestay_raya/config.dart';
+import 'package:homestay_raya/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,12 +23,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
   bool _isChecked = false;
-  bool _passwordVisible = true;
   var screenHeight, screenWidth, cardwitdh;
 
   @override
   void initState() {
     super.initState();
+    loadPref();
   }
 
   @override
@@ -74,9 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                             controller: _passEditingController,
                             keyboardType: TextInputType.visiblePassword,
-                            validator: (val) =>
-                                validatePassword(val.toString()),
-                            obscureText: _passwordVisible,
+                            obscureText: true,
                             decoration: const InputDecoration(
                               labelText: 'Password',
                               labelStyle: TextStyle(),
@@ -147,22 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  String? validatePassword(String value) {
-    String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$';
-    RegExp regex = RegExp(pattern);
-    if (value.isEmpty) {
-      return 'Please enter password';
-    } else {
-      if (!regex.hasMatch(value)) {
-        return 'Enter valid password';
-      } else {
-        return null;
-      }
-    }
-  }
-
   void _loginUser() {
-    print("Hello");
     if (!_formKey.currentState!.validate()) {
       Fluttertoast.showToast(
           msg: "Please fill in the login credentials",
@@ -175,15 +160,42 @@ class _LoginScreenState extends State<LoginScreen> {
 
     String _email = _emailEditingController.text;
     String _pass = _passEditingController.text;
-    http.post(Uri.parse("http://10.19.81.98/homestay_raya/php/register_user.php"),
+    http.post(Uri.parse("${Config.SERVER}/php/login_user.php"),
         body: {"email": _email, "password": _pass}).then((response) {
       print(response.body);
+      if (response.statusCode == 200) {
+        var jsonResponse = json.decode(response.body);
+        print(jsonResponse);
+        User user = User.fromJson(jsonResponse['data']);
+        print(user.phone);
+        //User user = User(id: jsonResponse['data']['name'],email: jsonResponse['email'],name: "",phone: "",address: "",regdate: "");
+        Navigator.push(context,
+            MaterialPageRoute(builder: (content) => MainScreen(user: user)));
+      } else {
+        Fluttertoast.showToast(
+            msg: "Login Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            fontSize: 14.0);
+      }
     });
   }
 
   void _goHome() {
+    User user = User(
+        id: "0",
+        email: "unregistered",
+        name: "unregistered",
+        address: "na",
+        phone: "0123456789",
+        regdate: "0");
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const MainScreen()));
+        context,
+        MaterialPageRoute(
+            builder: (content) => MainScreen(
+                  user: user,
+                )));
   }
 
   void _goLogin() {

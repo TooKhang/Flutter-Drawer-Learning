@@ -6,6 +6,7 @@ import 'package:homestay_raya/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
+
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
 
@@ -193,11 +194,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _registerAccountDialog() {
-    String name = _nameEditingController.text;
-    String email = _emailEditingController.text;
-    String phone = _phoneEditingController.text;
-    String passa = _passEditingController.text;
-    String passb = _pass2EditingController.text;
+    String _name = _nameEditingController.text;
+    String _email = _emailEditingController.text;
+    String _phone = _phoneEditingController.text;
+    String _passa = _passEditingController.text;
+    String _passb = _pass2EditingController.text;
 
     if (!_formKey.currentState!.validate()) {
       Fluttertoast.showToast(
@@ -217,7 +218,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           fontSize: 14.0);
       return;
     }
-    if (passa != passb) {
+    if (_passa != _passb) {
       Fluttertoast.showToast(
           msg: "Please check your passsword",
           toastLength: Toast.LENGTH_SHORT,
@@ -247,8 +248,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                _registerUser(name, email, phone, passa);
-                print("Hello World");
+                _registerUser(_name, _email, _phone, _passa);
               },
             ),
             TextButton(
@@ -317,34 +317,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _registerUser(String name, String email, String phone, String pass) {
-    print("Hello World");
     try {
-      http.post(Uri.parse("${Config.SERVER}/homestay_raya/php/register_user.php"), body: {
+      http.post(Uri.parse("${Config.SERVER}/php/register_user.php"), body: {
         "name": name,
         "email": email,
         "phone": phone,
         "password": pass,
-        "register": "register",
+        "register": "register"
       }).then((response) {
-        print(response.body);
-        // var data = jsonDecode(response.body);
-        // if (response.statusCode == 200 && data['status'] == "success") {
-        //   Fluttertoast.showToast(
-        //       msg: "Success",
-        //       toastLength: Toast.LENGTH_SHORT,
-        //       gravity: ToastGravity.BOTTOM,
-        //       timeInSecForIosWeb: 1,
-        //       fontSize: 14.0);
-        //   return;
-        // } else {
-        //   Fluttertoast.showToast(
-        //       msg: "Failed",
-        //       toastLength: Toast.LENGTH_SHORT,
-        //       gravity: ToastGravity.BOTTOM,
-        //       timeInSecForIosWeb: 1,
-        //       fontSize: 14.0);
-        //   return;
-        // }
+        var data = jsonDecode(response.body);
+        if (response.statusCode == 200 && data['status'] == "success") {
+          Fluttertoast.showToast(
+              msg: "Success",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              fontSize: 14.0);
+          return;
+        } else {
+          Fluttertoast.showToast(
+              msg: "Failed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              fontSize: 14.0);
+          return;
+        }
 
         //print(response.body);
       });
