@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             validator: (val) => val!.isEmpty ||
                                     !val.contains("@") ||
                                     !val.contains(".")
-                                ? "enter a valid email"
+                                ? "Enter a valid email"
                                 : null,
                             decoration: const InputDecoration(
                                 labelText: 'Email',
@@ -137,10 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 8,
             ),
-            GestureDetector(
-              onTap: _goHome,
-              child: const Text("Go back Home", style: TextStyle(fontSize: 18)),
-            )
           ],
         ),
       ))),
@@ -182,21 +178,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void _goHome() {
-    User user = User(
-        id: "0",
-        email: "unregistered",
-        name: "unregistered",
-        address: "na",
-        phone: "0123456789",
-        regdate: "0");
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (content) => MainScreen(
-                  user: user,
-                )));
-  }
 
   void _goLogin() {
     Navigator.push(context,
@@ -256,4 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
   }
+
+  
+
 }

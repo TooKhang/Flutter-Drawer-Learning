@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homestay_raya/model/user.dart';
 import '../screens/mainscreen.dart';
 import '../screens/profilescreen.dart';
-import '../screens/sellerscreen.dart';
+import '../screens/bookingscreen.dart';
 import 'EnterExitRoute.dart';
 
 class MainMenuWidget extends StatefulWidget {
@@ -29,7 +29,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
             ),
           ),
           ListTile(
-            title: const Text('Buyer'),
+            title: const Text('Search'),
             onTap: () {
               Navigator.pop(context);
               // Navigator.push(context,
@@ -42,7 +42,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
             },
           ),
           ListTile(
-            title: const Text('Seller'),
+            title: const Text('Booking'),
             onTap: () {
               Navigator.pop(context);
               // Navigator.push(

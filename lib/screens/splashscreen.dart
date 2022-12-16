@@ -1,11 +1,24 @@
 import 'dart:async';
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:homestay_raya/model/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../config.dart';
-import 'mainscreen.dart';
-import 'package:http/http.dart' as http;
+import 'package:homestay_raya/screens/registrationscreen.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Homestay Raya',
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+      ),
+      home: const SplashScreen(),
+    );
+  }
+}
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,73 +28,28 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
     super.initState();
-    autoLogin();
+    Timer(
+        const Duration(seconds: 3),
+        () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (content) => const RegistrationScreen())));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              Text("MYPASAR",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-              CircularProgressIndicator(),
-              Text("Version 0.1b")
-            ]),
-      ),
-    );
-  }
-
-  Future<void> autoLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _email = (prefs.getString('email')) ?? '';
-    String _pass = (prefs.getString('pass')) ?? '';
-    if (_email.isNotEmpty) {
-      http.post(Uri.parse("${Config.SERVER}/php/login_user.php"),
-          body: {"email": _email, "password": _pass}).then((response) {
-        var jsonResponse = json.decode(response.body);
-        if (response.statusCode == 200 && jsonResponse['status'] == "success") {
-          //var jsonResponse = json.decode(response.body);
-          User user = User.fromJson(jsonResponse['data']);
-          Timer(
-              const Duration(seconds: 3),
-              () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (content) => MainScreen(user: user))));
-        } else {
-          User user = User(
-              id: "0",
-              email: "unregistered",
-              name: "unregistered",
-              address: "na",
-              phone: "0123456789",
-              regdate: "0");
-          Timer(
-              const Duration(seconds: 3),
-              () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (content) => MainScreen(user: user))));
-        }
-      });
-    } else {
-      User user = User(
-          id: "0",
-          email: "unregistered",
-          name: "unregistered",
-          address: "na",
-          phone: "0123456789",
-          regdate: "0");
-      Timer(
-          const Duration(seconds: 3),
-          () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (content) => MainScreen(user: user))));
-    }
+        body: Center(
+            child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        const Text("Homestay Raya",
+            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+        Image.asset('assets/images/homestay.png', scale: 0.5),
+        const Text("Version 1.0")
+      ],
+    )));
   }
 }

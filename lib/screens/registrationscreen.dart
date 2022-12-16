@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:homestay_raya/config.dart';
+import 'package:homestay_raya/screens/loginscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -35,7 +35,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Registration Form")),
+        appBar: AppBar(title: const Text("Register an account")),
         body: Center(
             child: SingleChildScrollView(
           child: Card(
@@ -50,7 +50,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: _nameEditingController,
                       keyboardType: TextInputType.text,
                       validator: (val) => val!.isEmpty || (val.length < 3)
-                          ? "name must be longer than 3"
+                          ? "Name must be longer than 3"
                           : null,
                       decoration: const InputDecoration(
                           labelText: 'Name',
@@ -65,7 +65,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       validator: (val) => val!.isEmpty ||
                               !val.contains("@") ||
                               !val.contains(".")
-                          ? "enter a valid email"
+                          ? "Enter a valid email"
                           : null,
                       decoration: const InputDecoration(
                           labelText: 'Email',
@@ -76,7 +76,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ))),
                   TextFormField(
                       controller: _phoneEditingController,
-                       validator: (val) => val!.isEmpty || (val.length < 10)
+                      validator: (val) => val!.isEmpty || (val.length < 10)
                           ? "Please enter valid phone number"
                           : null,
                       keyboardType: TextInputType.phone,
@@ -171,6 +171,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         child: const Text('Register'),
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: _goLogin,
+                    child: const Text(
+                      "Already have account? Login",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                 ]),
               ),
@@ -349,5 +362,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void _goLogin() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 }
